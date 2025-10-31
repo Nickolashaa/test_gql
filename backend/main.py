@@ -62,9 +62,29 @@ class Mutation:
         database.append(new_user)
         return new_user
 
+    @strawberry.mutation
+    def delete_user(
+        id: int,
+    ) -> None:
+        for i in range(len(database)):
+            if database[i].id == id:
+                database.pop(i)
+                break
+
+    @strawberry.mutation
+    def update_user(
+        id: int,
+        name: str,
+        age: int,
+    ) -> User:
+        for elem in database:
+            if elem.id == id:
+                elem.name = name
+                elem.age = age
+                return elem
+
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
-
 
 app = FastAPI()
 app.add_middleware(
